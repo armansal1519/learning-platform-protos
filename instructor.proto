@@ -1,0 +1,90 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+
+
+
+message Instructor {
+  string id = 1;
+  string phone_number = 2;
+  string first_name =3;
+  string last_name =4;
+  string about_me =5;
+  string profile_image =6;
+
+  int64 created_at = 7;
+}
+
+message CreateInstructorRequest {
+  Instructor instructor = 1;
+}
+
+message GetInstructorRequest {
+  int64 id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateInstructorRequest {
+  Instructor instructor = 1;
+}
+
+message DeleteInstructorRequest {
+  int64 id = 1;
+}
+
+message ListInstructorRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListInstructorResponse {
+  repeated Instructor instructor_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateInstructorsRequest {
+  repeated CreateInstructorRequest requests = 1;
+}
+
+message BatchCreateInstructorsResponse {
+  repeated Instructor instructors = 1;
+}
+
+service InstructorService {
+  rpc Create ( CreateInstructorRequest ) returns ( Instructor );
+
+  rpc Get ( GetInstructorRequest ) returns ( Instructor );
+
+  rpc Update ( UpdateInstructorRequest ) returns ( Instructor );
+
+  rpc Delete ( DeleteInstructorRequest ) returns ( Empty );
+
+  rpc List ( ListInstructorRequest ) returns ( ListInstructorResponse );
+
+  rpc BatchCreate ( BatchCreateInstructorsRequest ) returns ( BatchCreateInstructorsResponse );
+}

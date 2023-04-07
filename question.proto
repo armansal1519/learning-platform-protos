@@ -1,0 +1,108 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+message QuestionMetadata {
+  string description = 1;
+  string question = 2;
+  string image_url = 3;
+  string audio_url = 4;
+  string right_answer = 5;
+  repeated string choices = 6;
+  string hint = 7;
+}
+
+message Parameter{
+  string Name=1;
+  float Rating=2;
+}
+
+
+message Question {
+  string id = 1;
+
+  string q_type = 2;
+
+  QuestionMetadata metadata = 3;
+  float rating = 4;
+  repeated Parameter parameter =5;
+
+ int64 created_at = 6;
+
+
+}
+
+message CreateQuestionRequest {
+  Question question = 1;
+
+  string lesson_id=2;
+}
+
+message GetQuestionRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateQuestionRequest {
+  Question question = 1;
+}
+
+message DeleteQuestionRequest {
+  int64 id = 1;
+}
+
+message ListQuestionRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListQuestionResponse {
+  repeated Question question_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateQuestionsRequest {
+  repeated CreateQuestionRequest requests = 1;
+}
+
+message BatchCreateQuestionsResponse {
+  repeated Question questions = 1;
+}
+
+service QuestionService {
+  rpc Create ( CreateQuestionRequest ) returns ( Question );
+
+  rpc Get ( GetQuestionRequest ) returns ( Question );
+
+  rpc Update ( UpdateQuestionRequest ) returns ( Question );
+
+  rpc Delete ( DeleteQuestionRequest ) returns ( Empty );
+
+  rpc List ( ListQuestionRequest ) returns ( ListQuestionResponse );
+
+  rpc BatchCreate ( BatchCreateQuestionsRequest ) returns ( BatchCreateQuestionsResponse );
+}

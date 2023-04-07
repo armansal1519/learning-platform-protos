@@ -1,0 +1,136 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+import "unit.proto";
+import "syllabus.proto";
+import "instructor.proto";
+
+
+message Course {
+  string id = 1;
+
+  string title = 2;
+
+  repeated string images = 3;
+  string short_desc = 4;
+  string full_desc = 5;
+
+  float rating=6;
+  string level=7;
+
+  int64 price=8;
+  string pricing=9;
+
+  int32 number_enrolled=10;
+
+  int32 finish_estimation=11;
+
+  string finish_estimation_unit=12;
+
+  int64 created_at = 13;
+
+  repeated Unit units=14;
+
+  repeated string PrerequisiteIds=15;
+
+  repeated Syllabus syllabuses=16;
+
+  repeated Course Prerequisite=17;
+
+  Instructor instructor =18;
+
+
+}
+
+
+
+message CreateCourseRequest {
+  Course course = 1;
+}
+
+message GetCourseRequest {
+  int64 id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateCourseRequest {
+  Course course = 1;
+}
+
+message DeleteCourseRequest {
+  int64 id = 1;
+}
+
+message ListCourseRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message SearchCourseRequest{
+  string search_phrase=1;
+  int32 offset=2;
+  int32 limit=3;
+  string order_by=4;
+
+
+}
+
+message ListCourseResponse {
+  repeated Course course_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateCoursesRequest {
+  repeated CreateCourseRequest requests = 1;
+}
+
+message BatchCreateCoursesResponse {
+  repeated Course courses = 1;
+}
+
+message SearchCourseResponse{
+  repeated Course courses=1;
+  int32 length =2;
+
+}
+
+service CourseService {
+  rpc Create ( CreateCourseRequest ) returns ( Course );
+
+  rpc Get ( GetCourseRequest ) returns ( Course );
+
+  rpc Search(SearchCourseRequest) returns (SearchCourseResponse);
+
+  rpc Update ( UpdateCourseRequest ) returns ( Course );
+
+  rpc Delete ( DeleteCourseRequest ) returns ( Empty );
+
+  rpc List ( ListCourseRequest ) returns ( ListCourseResponse );
+
+  rpc BatchCreate ( BatchCreateCoursesRequest ) returns ( BatchCreateCoursesResponse );
+}

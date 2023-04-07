@@ -1,0 +1,32 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+
+message SubmitQuestionRequest{
+  string question_id=1;
+  bool is_correct=2;
+  int32 seconds_to_submit=3;
+}
+message SubmitQuestionResponse{
+  string ack=1;
+}
+
+message FinishLessonRequest{
+  string lesson_id=1;
+  int32 seconds_to_finish=2;
+}
+
+message FinishLessonResponse{
+  string ack=1;
+}
+
+service SubmitService {
+  rpc SubmitQuestion ( SubmitQuestionRequest ) returns ( SubmitQuestionResponse );
+
+  rpc FinishLesson ( FinishLessonRequest ) returns ( FinishLessonResponse );
+
+}
+
+

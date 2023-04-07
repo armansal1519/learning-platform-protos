@@ -1,0 +1,89 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+
+
+message Syllabus {
+  string id = 1;
+
+  string title = 2;
+
+  string desc = 3;
+  int64 created_at = 4;
+
+
+}
+
+message CreateSyllabusRequest {
+  Syllabus unit = 1;
+}
+
+message GetSyllabusRequest {
+  int64 id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateSyllabusRequest {
+  Syllabus unit = 1;
+}
+
+message DeleteSyllabusRequest {
+  int64 id = 1;
+}
+
+message ListSyllabusRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListSyllabusResponse {
+  repeated Syllabus unit_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateSyllabusesRequest {
+  repeated CreateSyllabusRequest requests = 1;
+}
+
+message BatchCreateSyllabusesResponse {
+  repeated Syllabus units = 1;
+}
+
+service SyllabusService {
+  rpc Create ( CreateSyllabusRequest ) returns ( Syllabus );
+
+  rpc Get ( GetSyllabusRequest ) returns ( Syllabus );
+
+  rpc Update ( UpdateSyllabusRequest ) returns ( Syllabus );
+
+  rpc Delete ( DeleteSyllabusRequest ) returns ( Empty );
+
+  rpc List ( ListSyllabusRequest ) returns ( ListSyllabusResponse );
+
+  rpc BatchCreate ( BatchCreateSyllabusesRequest ) returns ( BatchCreateSyllabusesResponse );
+}

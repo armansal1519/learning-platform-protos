@@ -1,0 +1,102 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+import "question.proto";
+import "guide.proto";
+
+
+
+message Lesson {
+  string id = 1;
+
+  string title = 2;
+
+  string image = 3;
+  string desc = 4;
+  int32  rating=5;
+
+  int64 created_at = 6;
+
+  repeated Question questions=7;
+
+  Guide guide=8;
+
+
+
+}
+
+message CreateLessonRequest {
+  Lesson lesson = 1;
+
+  string unit_id=2;
+}
+
+message GetLessonRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateLessonRequest {
+  Lesson lesson = 1;
+}
+
+message DeleteLessonRequest {
+  int64 id = 1;
+}
+
+message ListLessonRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListLessonResponse {
+  repeated Lesson lesson_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateLessonsRequest {
+  repeated CreateLessonRequest requests = 1;
+}
+
+message BatchCreateLessonsResponse {
+  repeated Lesson lessons = 1;
+}
+
+service LessonService {
+  rpc Create ( CreateLessonRequest ) returns ( Lesson );
+
+  rpc Get ( GetLessonRequest ) returns ( Lesson );
+
+  rpc Update ( UpdateLessonRequest ) returns ( Lesson );
+
+  rpc Delete ( DeleteLessonRequest ) returns ( Empty );
+
+  rpc List ( ListLessonRequest ) returns ( ListLessonResponse );
+
+  rpc BatchCreate ( BatchCreateLessonsRequest ) returns ( BatchCreateLessonsResponse );
+}

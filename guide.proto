@@ -1,0 +1,94 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+
+
+message Field{
+  string Type=1;
+  string Wysiwyg=2;
+  string Image=3;
+}
+
+
+message Guide {
+  string id = 1;
+  string title = 2;
+
+  repeated Field fields=3;
+
+  int64 created_at = 4;
+}
+
+message CreateGuideRequest {
+  Guide guide = 1;
+}
+
+message GetGuideRequest {
+  int64 id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateGuideRequest {
+  Guide guide = 1;
+}
+
+message DeleteGuideRequest {
+  int64 id = 1;
+}
+
+message ListGuideRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListGuideResponse {
+  repeated Guide guide_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateGuidesRequest {
+  repeated CreateGuideRequest requests = 1;
+}
+
+message BatchCreateGuidesResponse {
+  repeated Guide guides = 1;
+}
+
+service GuideService {
+  rpc Create ( CreateGuideRequest ) returns ( Guide );
+
+  rpc Get ( GetGuideRequest ) returns ( Guide );
+
+  rpc Update ( UpdateGuideRequest ) returns ( Guide );
+
+  rpc Delete ( DeleteGuideRequest ) returns ( Empty );
+
+  rpc List ( ListGuideRequest ) returns ( ListGuideResponse );
+
+  rpc BatchCreate ( BatchCreateGuidesRequest ) returns ( BatchCreateGuidesResponse );
+}

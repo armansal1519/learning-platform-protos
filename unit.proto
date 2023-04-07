@@ -1,0 +1,94 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "./pb";
+
+import "empty.proto";
+
+import "lesson.proto";
+
+
+
+message Unit {
+  string id = 1;
+
+  string title = 2;
+
+  string desc = 3;
+  int64 created_at = 4;
+
+  repeated Lesson lessons=5;
+
+
+}
+
+message CreateUnitRequest {
+  Unit unit = 1;
+  string course_id=2;
+}
+
+message GetUnitRequest {
+  string id = 1;
+
+  View view = 2;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message UpdateUnitRequest {
+  Unit unit = 1;
+}
+
+message DeleteUnitRequest {
+  int64 id = 1;
+}
+
+message ListUnitRequest {
+  int32 page_size = 1;
+
+  string page_token = 2;
+
+  View view = 3;
+
+  enum View {
+    VIEW_UNSPECIFIED = 0;
+
+    BASIC = 1;
+
+    WITH_EDGE_IDS = 2;
+  }
+}
+
+message ListUnitResponse {
+  repeated Unit unit_list = 1;
+
+  string next_page_token = 2;
+}
+
+message BatchCreateUnitsRequest {
+  repeated CreateUnitRequest requests = 1;
+}
+
+message BatchCreateUnitsResponse {
+  repeated Unit units = 1;
+}
+
+service UnitService {
+  rpc Create ( CreateUnitRequest ) returns ( Unit );
+
+  rpc Get ( GetUnitRequest ) returns ( Unit );
+
+  rpc Update ( UpdateUnitRequest ) returns ( Unit );
+
+  rpc Delete ( DeleteUnitRequest ) returns ( Empty );
+
+  rpc List ( ListUnitRequest ) returns ( ListUnitResponse );
+
+  rpc BatchCreate ( BatchCreateUnitsRequest ) returns ( BatchCreateUnitsResponse );
+}
