@@ -1,19 +1,8 @@
 syntax = "proto3";
 
 
-// import "instructor.proto";
-// import "user.proto";
-
-message Instructor {
-  string id = 1;
-  string phone_number = 2;
-  string first_name =3;
-  string last_name =4;
-  string about_me =5;
-  string profile_image =6;
-
-  // google.protobuf.Timestamp created_at = 7;
-}
+import "instructor.proto";
+import "user.proto";
 
 
 package pb;
@@ -51,32 +40,32 @@ message InstructorLoginResp{
 
 
 
-// message UserRegisterReq {
-//   string phone_number = 1;
-//   string first_name =2;
-//   string last_name =3;
-//   string password =4;
-// }
+message UserRegisterReq {
+  string phone_number = 1;
+  string first_name =2;
+  string last_name =3;
+  string password =4;
+}
 
-// message UserRegisterResp{
+message UserRegisterResp{
 
-//   User user=1;
-//   string access_token=2;
-//   string refresh_token=3;
-// }
+  User user=1;
+  string access_token=2;
+  string refresh_token=3;
+}
 
 
-// message UserLoginReq {
-//   string phone_number = 1;
-//   string password =2;
-// }
+message UserLoginReq {
+  string phone_number = 1;
+  string password =2;
+}
 
-// message UserLoginResp{
+message UserLoginResp{
 
-//   User user=1;
-//   string access_token=2;
-//   string refresh_token=3;
-// }
+  User user=1;
+  string access_token=2;
+  string refresh_token=3;
+}
 
 
 
@@ -84,6 +73,6 @@ service AuthService {
   rpc InstructorRegister(InstructorRegisterReq) returns (InstructorRegisterResp) {}
   rpc InstructorLogin(InstructorLoginReq) returns (InstructorLoginResp) {}
 
-  // rpc UserRegister(UserRegisterReq) returns (UserRegisterResp) {}
-  // rpc UserLogin(UserLoginReq) returns (UserLoginResp) {}
+  rpc UserRegister(UserRegisterReq) returns (UserRegisterResp) {}
+  rpc UserLogin(UserLoginReq) returns (UserLoginResp) {}
 }
